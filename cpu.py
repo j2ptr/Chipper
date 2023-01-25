@@ -148,7 +148,62 @@ class CPU:
                     self.v[0xF] = 1
                 self.v[x] = sum
 
-                
+            elif (opcode & 0xF) == 0x5:
+                self.v[0xF] = 0
+                if self.v[x] > self.v[y]:
+                    self.v[0xF] = 1
+                self.v[x] -= self.v[y]
+
+            elif (opcode & 0xF) == 0x6:
+                self.v[0xF] = (self.v[x] & 0x1)
+                self.v[x] >>= 1
+
+            elif (opcode & 0xF) == 0x7:
+                self.v[0xF] = 0
+                if self.v[y] > self.v[x]:
+                    self.v[0xF] = 1
+                self.v[x] = self.v[y] - self.v[x]
+
+            elif (opcode & 0xF) == 0xE:
+                self.v[0xF] = (self.v[x] & 0x80)
+                self.v[x] <<= 1
+
+        elif instruction == 0x9000:
+
+        elif instruction == 0xA000:
+
+        elif instruction == 0xB000:
+
+        elif instruction == 0xC000:
+
+        elif instruction == 0xD000:
+
+        elif instruction == 0xE000:
+
+            if (opcode & 0xFF) == 0x9E:
+            
+            elif (opcode & 0xFF) == 0xA1:
+
+        elif instruction == 0xF000:
+
+            if (opcode & 0xFF) == 0x07:
+
+            elif (opcode & 0xFF) == 0x0A:
+
+            elif (opcode & 0xFF) == 0x15:
+
+            elif (opcode & 0xFF) == 0x18:
+
+            elif (opcode & 0xFF) == 0x1E:
+
+            elif (opcode & 0xFF) == 0x29:
+
+            elif (opcode & 0xFF) == 0x33:
+
+            elif (opcode & 0xFF) == 0x55:
+
+            elif (opcode & 0xFF) == 0x65:
+
 
 
 
