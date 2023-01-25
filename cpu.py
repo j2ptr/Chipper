@@ -66,9 +66,10 @@ class CPU:
     def cycle(self):
         i = 0
         while i < self.speed:
-            i += 1
             if (self.paused != True):
-                opcode = (self.memory[self.pc]) << 8 | self.memory[self.pc + 1]
+                opcode = ((self.memory[self.pc]) << 8) | self.memory[self.pc + 1]
+                self.executeInstruction(opcode)
+                i += 1
 
         if self.paused != True:
             self.updateTimers()
@@ -90,15 +91,15 @@ class CPU:
             self.speaker.stop()
 
     def executeInstruction(self, opcode):
+        print(opcode)
         self.pc += 2
         x = (opcode & 0x0F00) >> 8
-        y = (opcode & 0x0F00) >> 4
+        y = (opcode & 0x00F0) >> 4
 
         instruction = opcode & 0xF000
 
         if instruction == 0x0000:
             pass
-
             if opcode == 0x00E0:
                 self.renderer.clear()
 
@@ -126,6 +127,7 @@ class CPU:
 
         elif instruction == 0x6000:
             self.v[x] = (opcode & 0xFF)
+            print(self.v)
 
         elif instruction == 0x7000:
             self.v[x] += (opcode & 0xFF)
