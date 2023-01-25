@@ -36,6 +36,3 @@ class Keyboard:
     def onKeyUp(self, key):
         self.keysPressed.remove(self.KEYMAP[key])
 
-
-
-

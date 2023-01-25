@@ -9,3 +9,4 @@ class Speaker:
 
     def stop(self):
         pygame.mixer.music.stop()
+

@@ -64,6 +64,3 @@ class Renderer:
     def testRender(self):
         self.setPixel(5, 2)
 
-
-
-

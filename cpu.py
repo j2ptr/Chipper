@@ -1,6 +1,8 @@
 import sys
 import pygame
 import numpy
+import math
+import random
 
 numpy.set_printoptions(threshold=sys.maxsize)
 
@@ -169,48 +171,81 @@ class CPU:
                 self.v[x] <<= 1
 
         elif instruction == 0x9000:
+            if (self.v[x] != self.v[y]):
+                self.pc += 2
 
         elif instruction == 0xA000:
+            self.i = (opcode & 0xFFF)
 
         elif instruction == 0xB000:
+            self.pc = (opcode & 0xFFF) + self.v[0]
 
         elif instruction == 0xC000:
+            rand = math.floor(random.randrange(0, 0xFF))
+            self.v[x] = rand & (opcode & 0xFF)
 
         elif instruction == 0xD000:
+            width = 8
+            height = (opcode & 0xF)
+            row = 0
+            col = 0
+            self.v[0xF] = 0
+            while row < height:
+                sprite = self.memory[self.i + row]
+                row += 1
+                while col < width:
+                    if ((sprite & 0x80) > 0):
+                        if (self.renderer.setPixel(self.v[x] + col, self.v[y] + row)):
+                            self.v[0xF] = 1
+                    col += 1
+                    sprite <<= 1
 
         elif instruction == 0xE000:
-
             if (opcode & 0xFF) == 0x9E:
-            
+                if self.keyboard.isKeyPressed(self.v[x]):
+                    self.pc += 2
+
             elif (opcode & 0xFF) == 0xA1:
+                if not (self.keyboard.isKeyPressed(self.v[x])):
+                    self.pc += 2
 
         elif instruction == 0xF000:
-
             if (opcode & 0xFF) == 0x07:
+                self.v[x] = self.delayTimer
 
             elif (opcode & 0xFF) == 0x0A:
+                while self.keyboard.onNextKeyPressed == None:
+                    self.paused = True
+                if self.keyboard.onNextKeyPressed != None:
+                    self.v[x] = self.keyboard.onNextKeyPressed
+                    self.paused = False
 
             elif (opcode & 0xFF) == 0x15:
+                self.delayTimer = self.v[x]
 
             elif (opcode & 0xFF) == 0x18:
+                self.soundTimer = self.v[x]
 
             elif (opcode & 0xFF) == 0x1E:
+                self.i += self.v[x]
 
             elif (opcode & 0xFF) == 0x29:
+                self.i = self.v[x] * 5
 
             elif (opcode & 0xFF) == 0x33:
+                self.memory[self.i] = int(self.v[x] / 100)
+                self.memory[self.i + 1] = int((self.v[x] % 100) / 10)
+                self.memory[self.i + 2] = int(self.v[x] % 10)
 
             elif (opcode & 0xFF) == 0x55:
+                registerIndex = 0
+                while registerIndex <= x:
+                    self.memory[self.i + registerIndex] = self.v[registerIndex]
+                    registerIndex += 1
 
             elif (opcode & 0xFF) == 0x65:
+                registerIndex = 0
+                while registerIndex <= x:
+                    self.v[registerIndex] = self.memory[self.i + registerIndex]
+                    registerIndex += 1
 
-
-
-
-
-
-c = CPU(1, 2, 3)
-c.loadSpritesIntoMemory()
-c.loadRom('Stars.ch8')
-
-print(c.memory)
