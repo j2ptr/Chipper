@@ -142,9 +142,14 @@ class CPU:
                 self.v[x] ^= self.v[y]
 
             elif (opcode & 0xF) == 0x4:
-                sum = self.v[x] += self.v[y]
+                sum = (self.v[x] + self.v[y])
+                self.v[0xF] = 0 
+                if (sum > 0xFF):
+                    self.v[0xF] = 1
+                self.v[x] = sum
 
-                self.v[0xF] = 0
+                
+
 
 
 
